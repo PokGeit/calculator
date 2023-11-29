@@ -92,22 +92,97 @@ function onButtonClick(){
         case "subtract":
             updateCalcFields("-");
             break;
+
+        case "result":
+            updateResult();
+            break;
+
+        case "clear":
+            clearCalculator();
+            break;
+
+        case "delete":
+            onDeleteButton();
+            break;
     }
+    return;
+}
+
+function updateResult(){
+    if(calc_value_one == "" || calc_value_operation == OPERATION_DEFAULT || calc_value_two == "")
+    {
+        return
+    }
+
+    if(calc_value_one == "0" && calc_operation == OPERATION_DIVIDE)
+    {
+        clearCalculator();
+        updateScreen("ERROR");
+        return;
+    }
+
+    if(calc_value_two == "0" && calc_operation == OPERATION_DIVIDE)
+    {
+        clearCalculator();
+        updateScreen("ERROR");
+        return;
+    }
+
+    calc_value_result = calc_operation(calc_value_one, calc_value_two, calc_value_operation);
+    updateScreen(calc_value_result);
+    return;
+}
+
+function onDeleteButton()
+{
+    if(calc_value_result >= "")
+    {
+        clearCalculator();
+    }
+    else if(calc_value_two != "")
+    {
+        calc_value_two = calc_value_two.substring(0, calc_value_two.length-1);
+    }
+    else if(calc_value_operation != OPERATION_DEFAULT)
+    {
+        calc_value_operation = OPERATION_DEFAULT;
+    }
+    else if(calc_value_one != "")
+    {
+        calc_value_one = calc_value_one.substring(0, calc_value_one.length-1);
+    }
+    updateScreen();
+}
+
+function clearCalculator()
+{
+    calc_value_one = "";
+    calc_value_two = "";
+    calc_value_operation = OPERATION_DEFAULT;
+    calc_value_result = "";
+    updateScreen();
     return;
 }
 
 function updateCalcFields(str){
     //Determines which value field is being used
     let valueSelected;
+    if(calc_value_result != "")
+    {
+        calc_value_one = calc_value_result;
+        calc_value_two = "";
+        calc_value_operation = OPERATION_DEFAULT;
+        calc_value_result = "";
+    }
     if(calc_value_one == null || calc_value_one === "" || calc_value_one === "0")
     {
         valueSelected = 1;
     }
-    else if(calc_value_operation == null || calc_value_operation === 0)
+    else if(calc_value_operation == null || calc_value_operation === OPERATION_DEFAULT)
     {
         valueSelected = 1;
     }
-    else if(calc_value_operation != 0)
+    else if(calc_value_operation != 0 && calc_value_operation != OPERATION_DEFAULT)
     {
         valueSelected = 2;
     }
@@ -131,6 +206,23 @@ function updateCalcFields(str){
     }
     else
     {
+        if(str === ".")
+        {
+            if(valueSelected == 1)
+            {
+                if(!calc_value_one.includes("."))
+                {
+                    calc_value_one = calc_value_one+"."
+                }
+            }
+            else if(valueSelected == 2)
+            {
+                if(!calc_value_two.includes("."))
+                {
+                    calc_value_two = calc_value_two+"."
+                }
+            }
+        }
         if(calc_value_one != null && calc_value_one != "")
         {
             switch(str){
@@ -166,7 +258,7 @@ function updateScreen(specificText = "")
         {
             str = str+calc_value_one;
         }
-        if(calc_value_operation != null)
+        if(calc_value_operation != null && calc_value_operation != OPERATION_DEFAULT)
         {
             switch(calc_value_operation){
                 case OPERATION_ADD:

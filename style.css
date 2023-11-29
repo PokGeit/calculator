@@ -7,7 +7,7 @@ body {
 }
 
 .outterBox{
-    width: 300px;
+    width: 450px;
     height: 500px;
     display: flex;
     border: 8px solid black;
@@ -49,7 +49,6 @@ body {
 }
 
 .buttonBox{
-    border: 1px solid red;
     margin-top: 15px;
     width: 95%;
     height: 60px;
@@ -58,7 +57,7 @@ body {
 }
 
 button{
-    font-size: 25px;
+    font-size: 40px;
     font-style:oblique;
     border-radius: 10px;
 }
