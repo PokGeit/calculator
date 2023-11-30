@@ -109,19 +109,25 @@ function onButtonClick(){
 }
 
 function updateResult(){
+    if(calc_value_one == "31085" && calc_value_two == "")
+    {
+        updateScreen("POK POK!");
+        return
+    }
+    
     if(calc_value_one == "" || calc_value_operation == OPERATION_DEFAULT || calc_value_two == "")
     {
         return
     }
 
-    if(calc_value_one == "0" && calc_operation == OPERATION_DIVIDE)
+    if(calc_value_one === "0" && calc_value_operation == OPERATION_DIVIDE)
     {
         clearCalculator();
         updateScreen("ERROR");
         return;
     }
 
-    if(calc_value_two == "0" && calc_operation == OPERATION_DIVIDE)
+    if(calc_value_two === "0" && calc_value_operation == OPERATION_DIVIDE)
     {
         clearCalculator();
         updateScreen("ERROR");
@@ -197,11 +203,29 @@ function updateCalcFields(str){
     {
         if(valueSelected == 1)
         {
-            calc_value_one = calc_value_one+str;
+            if(str === "0" && calc_value_one === "")
+            {
+                return;
+            }
+            else
+            {
+                calc_value_one = calc_value_one+str;
+            }
         }
         else if(valueSelected == 2)
         {
-            calc_value_two = calc_value_two+str;
+            if(str === "0" && calc_value_two === "0")
+            {
+                return;
+            }
+            else if (str != "0" && calc_value_two === "0")
+            {
+                calc_value_two = str;
+            }
+            else
+            {
+                calc_value_two = calc_value_two+str;
+            }
         }
     }
     else
