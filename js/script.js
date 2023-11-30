@@ -135,7 +135,7 @@ function updateResult(){
 
 function onDeleteButton()
 {
-    if(calc_value_result >= "")
+    if(calc_value_result != "")
     {
         clearCalculator();
     }
